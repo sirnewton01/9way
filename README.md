@@ -91,7 +91,32 @@ with other processes or the operating system itself happen through file-based pr
 customizing the available files using namespaces controls the entire world view of the process
 with this one capability.
 
+The Plan 9 creators provided really useful building blocks that work well together. As a
+program writer it is really worth considering how to re-use those elements in your program
+rather than fighting against them or rewriting your own version. As with anything else in the
+domain of software engineering there are tradeoffs, but this is definitely worth a consideration
+when engineering your solution.
+
 ## Share data by communicating
+
+The Go programming language carried this same idea forward from Plan 9. Avoid creating a global
+data block and controlling access to it. Instead, allow different entities in the system to
+get copies of that data. Plan 9 has a number of ways to achieve this result. You can structure
+your program in such a way that it can pipe the data from input to output statelessly. This is
+of course the ideal case, but it's not always possible for long running processes.
+
+Plan 9 programs can expose their internal state as filesystems. Data is copied out using a
+file descriptor to another process with simple read operations. Similarly, external replicas
+of the data can be written to the file to copy the data to the program. This resembles a
+RESTful (Representational State Transfer) design used in many web-based systems, but can more
+seamlessly be applied to internal system process communication, and was invented decades before
+REST was formalized.
+
+Within a single process and its forked sub-processes there is a channel library available to
+C programs that allows you to copy data in a way that it is light weight and safe for concurrent
+access. Incidently, the Go programming language also has its own channels that are inspired by
+the Plan 9 channels. In both cases, this can be an effective tool to avoid complex and error
+prone locking logic in your program.
 
 ## Prefer plain text data streams
 
