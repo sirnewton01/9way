@@ -120,13 +120,84 @@ prone locking logic in your program.
 
 ## Prefer plain text data streams
 
-## Short file paths
+As in UNIX, plain text is preferred over binary data. Text can more easily be read by a human.
+A variety of tools can work with it including quite a number of system tools, such as grep, awk
+and sed. Text can be viewed almost anywhere on nearly every operating system making it more
+ubiquitous and future-proof. Text is much smaller than most document formats and so it is
+faster to copy or transmit. Plain text is really easy to type and edit.
 
-## Use files to transfer state changes between processes
+In the past it was more difficult to handle text encoded for a different language. There were
+special encodings for different language. Often times the user would be expected to know the
+encoding for a file before opening it. With the advent of Unicode and the UTF-8 encoding these
+problems are much less common. In fact, Plan 9 was the first operating system to adopt the UTF-8
+encoding and to make it mandatory across the entire system lessening the burden on the user.
+Other systems have proven very slow to adopt it.
 
-## Independent executables
+For the various protocols used in Plan 9, which operate using special files, many of them are
+text-based making it more natural for end users to interact with them. There are exceptions of
+course where performance is major concern or other technical reasons. The text-based protocols
+are much easier to learn, understand, interact and even mock. If you want to move the mouse
+to a specific place you can echo a set of coordinates to /dev/mouse and the pointer will move.
+There are numerous other examples.
 
-## Code that compiles quickly
+## Shorten file paths
+
+File paths can get long and unwieldy. There are a number of reasons for this. Average users
+aren't generally allowed to put files in top-level directories because those are shared with
+other users. This tends to force users to put their own files in their home directory where
+they have permission to place them. References to these files in various places retain these
+longer paths and generally get multiplied by all of the environment variables, configuration
+files and documents that refer to them or subdirectories.
+
+Plan 9 gives you the ability to bind files from one place into another on a per-process basis.
+For example, a user can bind their favorite programs into the root /bin directory, for only their
+processes. No other user needs to be impacted by their customization. This also explains why
+Plan 9 doesn't have multiple directories for programs (e.g. /usr/bin, /usr/local/bin) since
+multiple locations can be bound into the single /bin. It's also why the PATH environment variable
+isn't used very much anymore. The same applies to process filesystems, such as acme, which
+mounts its filesystem in /acme making it much easier for scripts to interface with it with the
+shorter paths.
+
+Sometimes, insufficient care is taken to name the files and directories themselves. It is nice
+to have the freedom to name something "My lovely essay about horses and ranches in southern France.txt" it is often better to give it a name that is unique and terse so that it is easier to
+type frequently. Also, the spaces are not prohibited but can make lists of files harder to
+read. If you need to find a file based on its contents you can often use grep to scan a list of
+files for a snippet or pattern. For common files and paths the manual can provide these details
+and explain the mnemonics.
+
+## Self-contained executables
+
+As you have seen in previous sections, the Plan 9 systems is very flexible in the
+customization of the file tree (ie. namespace). As a result, there can be considerable variation
+in the available files. As a result, program executables tend to minimize their dependencies
+on other files because they may not always be available in a context. This is why the system
+doesn't support dynamic libraries (e.g. shared objects or DLL's). Each executable is statically
+linked to include what it uses and exclude what is unnecessary. This gives the executable a
+much higher chance of running in a minimal namespace or sandbox whre some dependencies
+are not available. This same design decision was carried forward with Go, which has given it an
+advantage when it comes to deployment over other languages that have heavy and complex runtime
+dependencies. Containers were built as a complicated solution to the problem of deploying
+programs with complex dependencies. Plan 9's use of namespaces and statically linked executables
+proved to be a much simpler and elegant solution.
+
+## Compile quickly
+
+One aspect of software design that is often overlooked is the time spent waiting for a
+program to compile. There is of course a natural tendency for programs to become larger, which
+increases the time it takes to compile it. Some compilers and code base can take hours to
+compile, making it much more difficult to iterate on changes to the program. It can also lead
+to very complicated instructions for incremental compilation, convoluted build scripts or even
+tactical compiler solutions, such as pre-compiled headers. In the worse cases, programmers
+have given up on compiled languages entirely prefering instead interpreted languages losing out
+on the benefits.
+
+Compile times are affected by the size and nature of the code base, but they are also affected
+by the compiler design and the language itself. Plan 9 addresses the compiler and language part.
+On a typical modern system the entire system can be recompiled in just a few minutes, including
+kernel, compilers, user applications and everything, which is quite impressive and makes
+installing updates to the system quite trivial. This is made possible by a concerted effort to
+keep the code bases for programs as small as possible while taking advantage of the compiler
+speed.
 
 ## Textual UI's
 
