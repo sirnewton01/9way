@@ -260,3 +260,5 @@ graphical interfaces this choice seems to be particularly well suited to the cur
 Many developers are already using mouse-driven UI with command-line hybrids, albeit
 with outdated and limited integration points and with the outdated hot-key concepts hanging
 around.
+
+Do you have any comments or issues with this article? If so, you can raise them here [github.com/sirnewton01/9way/issues](https://github.com/sirnewton01/9way/issues)
