@@ -62,7 +62,7 @@ filesystem, not just an administrative account, and each process can have its ow
 really opens things up.
 
 Plan 9 has its own manual system inherited from UNIX called "man." You can document different
-aspects of your program such as a synopis, command line arguments, environment variables and
+aspects of your program such as a synopsis, command line arguments, environment variables and
 even details of the filesystem it exposes. The manuals are text-only and usually quite brief,
 which helps to avoid documentation bloat. If every program contributes useful manuals to the
 built-in system then users can more easily find it and read it in a consistent format. There
@@ -114,7 +114,7 @@ REST was formalized.
 
 Within a single process and its forked sub-processes there is a channel library available to
 C programs that allows you to copy data in a way that it is light weight and safe for concurrent
-access. Incidently, the Go programming language also has its own channels that are inspired by
+access. Incidentally, the Go programming language also has its own channels that are inspired by
 the Plan 9 channels. In both cases, this can be an effective tool to avoid complex and error
 prone locking logic in your program.
 
@@ -173,7 +173,7 @@ in the available files. As a result, program executables tend to minimize their 
 on other files because they may not always be available in a context. This is why the system
 doesn't support dynamic libraries (e.g. shared objects or DLL's). Each executable is statically
 linked to include what it uses and exclude what is unnecessary. This gives the executable a
-much higher chance of running in a minimal namespace or sandbox whre some dependencies
+much higher chance of running in a minimal namespace or sandbox where some dependencies
 are not available. This same design decision was carried forward with Go, which has given it an
 advantage when it comes to deployment over other languages that have heavy and complex runtime
 dependencies. Containers were built as a complicated solution to the problem of deploying
@@ -188,7 +188,7 @@ increases the time it takes to compile it. Some compilers and code base can take
 compile, making it much more difficult to iterate on changes to the program. It can also lead
 to very complicated instructions for incremental compilation, convoluted build scripts or even
 tactical compiler solutions, such as pre-compiled headers. In the worse cases, programmers
-have given up on compiled languages entirely prefering instead interpreted languages losing out
+have given up on compiled languages entirely preferring instead interpreted languages losing out
 on the benefits.
 
 Compile times are affected by the size and nature of the code base, but they are also affected
@@ -222,13 +222,41 @@ to the user workflow. Clearly, something like map rendering or image viewing is 
 in a graphical UI than somehow as text. The point is that graphics should be used sparingly as
 it can also be distracting. The same arguments can be made of other media, such as audio.
 
-## Reasonable Defaults
+## Use sane defaults
+
+For every user, there will be a time when they will use your program for the first time. Before
+they have had a chance to peel back the layers of the onion and appreciate the full capability
+they will need to try it. As mentioned earlier, the manual can provide a brief overview of the
+primary elements to get them started, but only if there aren't so many mandatory parameters.
+If the default values for optional parameters are unsuitable in many cases then it will make
+it more difficult for a new user to become comfortable with it. Aggressively minimize the
+number of options to avoid many of these pitfalls.
+
+Reasonable defaults should also try to conform to the established conventions of the system to
+improve usability. There are certain well known directories where most users will expect to
+find certain things, such as the user's home directory. There are key and mouse bindings that
+a number of programs share, such as left-click positions or selects things while right-click
+opens or searches for things.
 
 ## Optimize for readability
 
-## Hide nothing
+There is a strong emphasis on making it easier for users to read things. Code is optimized to
+make it easier to read through the use of small functions with clear names. It is organized
+into different files and directories according to functionality. The UI is generally sparse with
+little window trim or menu bars so that the content is afforded the additional space and easier
+to read. The focus is on the content and less on anything that might distract from it.
 
 ## Eschew hot-keys
 
-## Give users control over their screen
-## Give content the focus
+Many traditional computer systems made heavy use of special key strokes to perform various
+actions. The idea was that it would help users to perform actions more quickly. In an era where
+all interfaces were text-only this may have been the case. The Plan 9 team found that point and
+click with the mouse was actually more efficient in many cases and so they minimized the number
+of hot key combinations used in the base system (e.g. Alt-F4 and Cmd-Q) preferring instead either
+full text commands that are visible on the screen, such as Get or Snarf, or mouse gestures
+using one or more of the buttons. Sometimes there is even combinations of both with some very
+interesting results. Especially now that most computer users are familiar with mouse driven
+graphical interfaces this choice seems to be particularly well suited to the current state.
+Many developers are already using mouse-driven UI with command-line hybrids, albeit
+with outdated and limited integration points and with the outdated hot-key concepts hanging
+around.
